@@ -81,4 +81,33 @@ public class BeastHunter implements GameEntity, DamageReceiver, DamageDealer {
     public int getSanity() {
         return sanity;
     }
+
+    /**
+     * Exposes the maximum health capacity of the hunter.
+     *
+     * @return The maximum allowable health points.
+     */
+    public int maxHealth() {
+        return vitality.getMax();
+    }
+
+    /**
+     * Static factory method that reconstructs a BeastHunter instance from a persisted state.
+     * Restores exact health and sanity values while preserving internal encapsulation.
+     *
+     * @param name        The moniker of the hunter.
+     * @param maxHp       The structural physical limit.
+     * @param currentHp   The health points at the time of saving.
+     * @param attackPower The raw damage capability.
+     * @param sanity      The active sanity points at the time of saving.
+     * @return A fully restored BeastHunter instance.
+     */
+    public static BeastHunter restoreState(String name, int maxHp, int currentHp, int attackPower, int sanity) {
+        BeastHunter restored = new BeastHunter(name, maxHp, attackPower, sanity);
+        int damageTaken = maxHp - currentHp;
+        if (damageTaken > 0) {
+            restored.applyDamage(damageTaken);
+        }
+        return restored;
+    }
 }
